@@ -2,6 +2,8 @@
 
 ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/60582368-cb0f-4e5a-93c6-a26380ec0845)
 
+## REF DOCS == ``` https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/ ```
+
 ### WHAT IS SERVICE MESH IN KUBERNETES CLUSTER
 - SERVICE MESH MANAGES THE TRAFFIC MANAGEMENT IN KUBERNETES CLUSTER SPECIALLY EAST WEST TRAFFIC MANAGEMENT OF K8S CLUSTER.
 - TRAFFIC BETWEEN KUBERENTES SERVICES AND CLUSTERS
@@ -38,6 +40,9 @@
 - So we can use deplooyment strtegies like Canary where initially you can request your catalog service to ONLY SEND 10% OF TRAFFIC to the new VERSION that is V2, and REST 90% TO V1
 
 ## HOW ISTIO WORKS
+
+![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/5dbc8ff8-200e-4b05-9551-f85dc0003d44)
+
 - ISTIO ADDS NEW CONTAINER IN EACH AND EVERY POD, THAT SITS NEXT TO THE ACTUAL CONTAINER
 - SIDE-CAR CONTAINER HAS A ENVOY PROXY APPLICATION IT IS A PROXY SERVER, IT HANDLES THE TRAFFIC MANAGEMENT OF KUBERNETES CLUSTER
 - ANY REQUEST IN AND OUTSIDE WILL COME AND GO FROM THE SIDE-CAR CONTAINER
@@ -55,3 +60,22 @@
 
 ### ISTIOD
 -- IT IS PRIMARY COMPONET OF THE ISTIO IT RECEIVERS ALL THES INFORMATION AND IT KEEPS THE TRACK OF ALL THE SERVICE METRICES WHICH WILL 
+
+
+### HOW Side-Car Container works ( ADMISSION CONTROLLER)
+- IF ISTIO WANTS TO ADD A SIDE-CAR CONTAINER TO EACH AND EVERY POD THAT IS CREATED IN THE KUBERNETES CLUSTER, ISTIO NEEDS TO GET THE INFORMATION FROM SOME WHERE.
+- IF SOMEONE SENDS A REQEUST TO API SERVER FOR A POD CREATION ISTIO SHOULD BE IMMEDIATELY NOTIFIED THAT SOMEONE IS REQUESTING ME FOR CREATING A POD DO YOU WANT TO ADD A SIDE-CAR CONATINER TO IT OR NOT.
+- IF API SERVER IS NOTIFIYING ISTIO A SIDE-CAR CONTAINER NOT GET CREATED FOR THE POD.
+- ISTIO USES ADMISSION CONTROLLER
+
+### ADMISSION CONTROLLER
+- ISTIO USES A LITTLE ADVANCE CONCEPT OF DYNAMIC ADMISSION CONTROL OR ADMISSION WEBHOOK
+- THERE IS A USER HE WANTS TO CREATE A POD, HE USE KUBECTL APPLY COMMAND AND IT GOES TO API SERVER
+- STEP 1 : - THERE A COMPONENT IN THE API SERVER WHICH WILL BASICALLY VERIFY IS THE USER IS AUTHENTICATED AND AUTHORIZED TO PERFORM THE ACTION OR NOT.
+- BEFORE API SERVER CREATES THE OBJECTS IN THE ETCD, ADMISSION CONTROLLER WILL COMES IN BETWEEN INTERCEPT AND MUTATE - MODIFY (OR) VALIDATE THE OBJECTS 
+- STEP 2 : - IF USER IS AUTH AND AUTHORIZED THEN API SERVER WILL TAKE THIS OBJECT AND PERSISTED THE OBJECT IN THE ETCD OR STORES THE OBJECT IN THE ETCD.
+- FOR EXAMPLE
+- - You want to create a PVC so the reqeust goes to api server you have authen and author, So api server tries to add that resource to ETCD, before adding there is a admission controller that is called STORAGE CLASS ADMISSION CONTROLLER, Which comes into picture it will see if the PVC has the storage class field or not, if it does not have it will mutate (modify) the object and in the object it will add the field to your PVC creation request mutation admission controller will add a new field and that field is called storage class equals to XYZ and then the object is persisted (stored) into ETCD.
+  - Like this we have 30+ admission controllers that are available by default in every kubernetes cluster, Ofcourse sometimes they are disabled by some distributions, And these admission controllers you don't have to install them they are pre-compiled into the API SERVER, SO Api server already has code for all the 30+ admission controllers you can just ENABLE OR DISABLE THEM.
+  - REF DOC  === ``` https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/ ```
+  
