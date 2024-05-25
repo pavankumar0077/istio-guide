@@ -2,3 +2,10 @@
 
 - Follow the link
 https://istio.io/latest/docs/setup/getting-started/
+
+-- demo is a profile
+``` 
+istioctl install --set profile=demo -y
+```
+- Which comes with default configuration values that are useful for your demo 
+- IF you are going with production thenyou will get most strict values 
