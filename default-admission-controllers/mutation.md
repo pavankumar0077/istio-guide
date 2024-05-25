@@ -2,6 +2,11 @@
 
 ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/2c73e990-0635-4b8a-9640-4f91f9ac12ee)
 
+###  TO APPLY
+``` kubectl apply -f pvc.yaml ```
+
+### TO EDIT PVC 
+``` kubectl edit pvc myclaim ```
 
 BEFORE MUTATION 
 --
