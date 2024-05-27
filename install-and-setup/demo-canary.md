@@ -61,3 +61,4 @@ spec:
 ```
 - IF THE SUBSET IS V1 THEN IT ALWAYS GO TO VERSION  V1, WE HAVE MENTIONED THIS IN THE VIRTUAL SERVICES
 
+![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/36a12fe1-d4d3-4539-92a3-19a448fcd285)
