@@ -62,3 +62,43 @@ spec:
 - IF THE SUBSET IS V1 THEN IT ALWAYS GO TO VERSION  V1, WE HAVE MENTIONED THIS IN THE VIRTUAL SERVICES
 
 ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/36a12fe1-d4d3-4539-92a3-19a448fcd285)
+- NOW IT TO REVIEWS VERSION V1 ONLY.
+- NOW WE ARE IMPLEMENTING, 50% TO V1 AND 50% TO V3. WHERE ARE MENTIONING IN THE VIRTUALSERVICE.
+```
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 50
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 50
+```
+- PERVIOSLY COMPLETE TRAFFIC IS GOING TO VERSION V1, NOW IT GOES TO V1 AND V3 AS 50%
+```
+drbt@idrbt:~/istio-1.22.0$ sudo nano taffic-shifting.yaml
+[sudo] password for idrbt: 
+idrbt@idrbt:~/istio-1.22.0$ kubectl apply -f taffic-shifting.yaml 
+virtualservice.networking.istio.io/reviews configured
+idrbt@idrbt:~/istio-1.22.0$
+```
+- ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/54bb6bd4-ffbf-4001-9c8a-3951eae88e12)
+- ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/ca66081e-d321-4260-bf79-bff2db657d77)
+
+```
+- destination:
+        host: reviews
+        subset: v3
+      weight: 100
+```
+- IF WE MAKE WEIGHT 100 THEN IT WILL ONLY GOES TO VERSION V3
+  
