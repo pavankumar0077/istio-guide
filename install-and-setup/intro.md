@@ -1,4 +1,9 @@
 ## -- CONTINUE 
+
+-- APPLY GATEWAY
+```
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+```
 -- INSTALL THE APPLICATION AND RUN IN LOCAL BY GATEWAY AND MINIKUBE TUNNEL
 ```
 drbt@idrbt:~/istio-1.22.0$ minikube tunnel
