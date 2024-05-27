@@ -157,5 +157,32 @@ docker@minikube:~$ curl http://10.107.202.40:9080/api/v1/products
 - BY DEFAULT ISTIO RUNS MUTAL TLS IN THE PERMISSIVE MODE, IT SAYS EITHER ACCESS THE SERVICE USING MUTUAL TLS OR YOU CAN ALSO ACCESS IT WITHOUT MUTUAL TLS
 - WE NEED APPLY MUTUAL TLS
 ```
-
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mtls-mode
+  namespace: default
+spec:
+  mtls:
+    mode: STRICT
 ```
+```
+idrbt@idrbt:~/istio-1.22.0$ kubectl apply -f tls-mode.yaml 
+peerauthentication.security.istio.io/mtls-mode created
+idrbt@idrbt:~/istio-1.22.0$
+```
+
+-- CONNECTION REFUSED
+```
+idrbt@idrbt:~/istio-1.22.0$ kubectl apply -f tls-mode.yaml 
+peerauthentication.security.istio.io/mtls-mode created
+idrbt@idrbt:~/istio-1.22.0$ minikube ssh
+docker@minikube:~$ curl http://10.107.202.40:9080/api/v1/products
+curl: (56) Recv failure: Connection reset by peer
+docker@minikube:~$
+```
+- Here we are sending a CURL request - THE ISTIO SIDE-CAR CONTAINER IS ASKING FOR THE CERTIFICATE, I DON'T HAVE THE CERTIFICATE SO IT HAS REJECTED THE CONNECTIONN.
+- IF I AM TRY TO ACCESS FROM ANY OTHER SERVICES I AM ABLE TO DO IT.
+- IF I TRY FROM THE APPLICATION WE CAN ACCESS IT BY MANUALLY USING CURL REQUEST WE ARE NOT ABLE TO ACCESS IT THAT MEANS IT IS SECURE.
+- ![image](https://github.com/pavankumar0077/istio-guide/assets/40380941/577100e6-6003-4bb8-977c-e52dc572660a)
+- HERE ISTIO MAKE SURE THAT IF ANYONE TRIES TO ACCESS THE SERVICE WITHOUT A PROPER CERTIFICATE IT THROWS AN ERROR.
